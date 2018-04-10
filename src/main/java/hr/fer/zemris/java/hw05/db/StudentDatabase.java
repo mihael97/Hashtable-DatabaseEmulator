@@ -57,17 +57,18 @@ public class StudentDatabase {
 
 		int indexInt = 1;
 		for (String string : studentList) {
-			String[] array = string.split("\\s+");
+			//String[] array = string.split("\\s+");
+			String[] array=string.split("\t");
 
 			if (array.length == 1)
 				continue;
 
-			if (array.length != 7) {
+			if (array.length != 4) {
 				throw new IllegalArgumentException(
 						"Broj argumenata u \'" + string + "\' na poziciji " + indexInt + " je " + array.length);
 			}
 
-			StudentRecord pom = new StudentRecord(array[0], array[1], array[2], array[6]);
+			StudentRecord pom = new StudentRecord(array[0], array[1], array[2], array[3]);
 			index.put(array[0], pom);
 			list.add(pom);
 			indexInt++;

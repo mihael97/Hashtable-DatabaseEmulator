@@ -77,7 +77,7 @@ public class ComparisonOperatorTest {
 
 		// riječ započinje i završava s određenim znakom
 		assertEquals(true, operator.satisfied("Jasna", "J*a")); 
-		assertEquals(true, operator.satisfied("Jasna", "M*a"));
+		assertEquals(false, operator.satisfied("Jasna", "M*a"));
 
 		assertEquals(false, operator.satisfied("Jasna", "Jasn*na"));
 

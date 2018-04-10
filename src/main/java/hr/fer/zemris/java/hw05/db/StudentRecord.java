@@ -38,7 +38,11 @@ public class StudentRecord {
 	 *            - završna ocjena
 	 */
 	public StudentRecord(String jmbag, String lastName, String firstName, String finalGrade) {
-		super();
+		
+		if(jmbag==null || lastName==null || firstName==null || finalGrade==null) {
+			throw new NullPointerException("Jedan od atributa je null!");
+		}
+		
 		this.jmbag = jmbag;
 		this.lastName = lastName;
 		this.firstName = firstName;

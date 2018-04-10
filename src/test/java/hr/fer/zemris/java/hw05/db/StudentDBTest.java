@@ -26,38 +26,26 @@ public class StudentDBTest {
 
 	@Test
 	public void searchingByJMBAG() {
-		List<StudentRecord> list = StudentDB.analize("jmbag=\"0000000004\"");
+		List<StudentRecord> list = StudentDB.analize("jmbag=\"0000000021\"");
 
-		assertEquals("Mihael", list.get(0).getFirstName());
-		assertEquals("Kovač", list.get(0).getLastName());
+		assertEquals("Antonija", list.get(0).getFirstName());
+		assertEquals("Jakobušić", list.get(0).getLastName());
 	}
 
 	@Test
 	public void searchingByLastName() {
-		List<StudentRecord> list = StudentDB.analize("lastName=\"Novak\"");
+		List<StudentRecord> list = StudentDB.analize("lastName=\"Jurina\"");
 
-		assertEquals("0000000006", list.get(0).getJmbag());
-		assertEquals("Josip", list.get(0).getFirstName());
+		assertEquals("0000000022", list.get(0).getJmbag());
+		assertEquals("Filip", list.get(0).getFirstName());
 	}
 
 	@Test
 	public void searchingByFirstName() {
-		List<StudentRecord> list = StudentDB.analize("firstName=\"Mirko\"");
+		List<StudentRecord> list = StudentDB.analize("firstName=\"Sanjin\"");
 
-		assertEquals("0000000001", list.get(0).getJmbag());
-		assertEquals("Horvat", list.get(0).getLastName());
-	}
-
-	@Test
-	public void likeSearching() {
-		List<StudentRecord> list = StudentDB.analize("lastName LIKE \"*ić\"");
-		assertEquals(5, list.size());
-
-		assertEquals("0000000002", list.get(0).getJmbag());
-		assertEquals("0000000003", list.get(1).getJmbag());
-		assertEquals("0000000005", list.get(2).getJmbag());
-		assertEquals("0000000007", list.get(3).getJmbag());
-		assertEquals("0000000009", list.get(4).getJmbag());
+		assertEquals("0000000007", list.get(0).getJmbag());
+		assertEquals("Čima", list.get(0).getLastName());
 	}
 
 	@Test
@@ -66,15 +54,15 @@ public class StudentDBTest {
 		assertEquals(2, list.size());
 
 		assertEquals("0000000004", list.get(0).getJmbag());
-		assertEquals("Kovač", list.get(0).getLastName());
+		assertEquals("Božić", list.get(0).getLastName());
 
 		assertEquals("0000000005", list.get(1).getJmbag());
-		assertEquals("Marić", list.get(1).getLastName());
+		assertEquals("Brezović", list.get(1).getLastName());
 	}
 
 	private List<String> readFromFile() {
 		try {
-			List<String> lines = Files.readAllLines(Paths.get("src/main/resources/Studenti2.txt"),
+			List<String> lines = Files.readAllLines(Paths.get("src/main/resources/Studenti.txt"),
 					StandardCharsets.UTF_8);
 
 			return lines;

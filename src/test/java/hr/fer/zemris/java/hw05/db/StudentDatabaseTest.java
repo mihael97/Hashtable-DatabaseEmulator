@@ -20,17 +20,17 @@ public class StudentDatabaseTest {
 	public void existingJMBG() {
 		StudentDatabase db = new StudentDatabase(readFromFile());
 
-		StudentRecord record = db.forJMBAG("0000000019");
+		StudentRecord record = db.forJMBAG("0000000063");
 
-		assertEquals("0000000019", record.getJmbag());
-		assertEquals("Prezime019", record.getLastName());
-		assertEquals("Ime019", record.getFirstName());
-		assertEquals("1", record.getFinalGrade());
+		assertEquals("0000000063", record.getJmbag());
+		assertEquals("Žabčić", record.getLastName());
+		assertEquals("Željko", record.getFirstName());
+		assertEquals("4", record.getFinalGrade());
 
-		record = db.forJMBAG("0000000434");
-		assertEquals("Prezime434", record.getLastName());
-		assertEquals("Ime434", record.getFirstName());
-		assertEquals("3", record.getFinalGrade());
+		record = db.forJMBAG("0000000044");
+		assertEquals("Pilat", record.getLastName());
+		assertEquals("Ivan", record.getFirstName());
+		assertEquals("5", record.getFinalGrade());
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class StudentDatabaseTest {
 	public void trueTest() {
 		StudentDatabase db=new StudentDatabase(readFromFile());
 		
-		assertEquals(500, db.filter((record)->true).size());
+		assertEquals(63, db.filter((record)->true).size());
 	}
 	
 	@Test

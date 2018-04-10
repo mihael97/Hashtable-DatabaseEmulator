@@ -39,21 +39,92 @@ public class StudentDB {
 					break;
 
 				if (line.substring(0, 5).equals("query")) {
-					forPrint = analize(line.substring(4));
+					forPrint = analize(line.substring(5));
 				} else {
 					throw new IllegalArgumentException(
 							"Naredba mora započeti s \'query\',ali je zadana naredba \'" + line + "\"!");
 				}
 
-				for (StudentRecord student : forPrint) {
-					System.out.println(student);
-				}
+				System.out.printf(makeTable(forPrint));
 
-				System.out.println("Ispisano " + forPrint.size() + " zapisa!");
+				System.out.println("Ispisano :" + forPrint.size());
 			}
 
 			System.out.println("Doviđenja!");
 		}
+	}
+
+	/**
+	 * Metoda koja generira grafičku tablicu sa zapisima studenta
+	 * 
+	 * @param forPrint
+	 *            - lista studenata koji se moraju ispisati
+	 * @return String za ispis
+	 */
+	private static String makeTable(List<StudentRecord> forPrint) {
+		int[] array = { 0, 0, 0, 0 };
+
+		if (forPrint.size() == 0) {
+			return "";
+		}
+
+		for (StudentRecord student : forPrint) {
+			if (student.getJmbag().length() > array[0])
+				array[0] = student.getJmbag().length();
+			if (student.getLastName().length() > array[1])
+				array[1] = student.getLastName().length();
+			if (student.getFirstName().length() > array[2])
+				array[2] = student.getFirstName().length();
+			if (student.getFinalGrade().length() > array[3])
+				array[3] = student.getFinalGrade().length();
+		}
+
+		StringBuilder builder = new StringBuilder().append("+");
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0, length = array[j] + 2; i < length; i++) {
+				builder.append("=");
+			}
+			builder.append("+");
+		}
+
+		builder.append("\n");
+
+		StringBuilder string = new StringBuilder();
+		string.append(builder.toString());
+
+		for (StudentRecord student : forPrint) {
+			
+			string.append("|");
+
+			string.append(" ");
+			string.append(student.getJmbag());
+			
+			for(int i=0;i<(array[0]+1-student.getJmbag().length());i++) string.append(" ");
+			string.append("|");
+			
+			string.append(" ");
+			string.append(student.getLastName());
+			
+			for(int i=0;i<(array[1]+1-student.getLastName().length());i++) string.append(" ");
+			string.append("|");
+			
+			string.append(" ");
+			string.append(student.getFirstName());
+			
+			for(int i=0;i<(array[2]+1-student.getFirstName().length());i++) string.append(" ");
+			string.append("|");
+			
+			string.append(" ");
+			string.append(student.getFinalGrade());
+			
+			for(int i=0;i<(array[3]+1-student.getFinalGrade().length());i++) string.append(" ");
+			
+			string.append("|\n");
+		}
+
+		string.append(builder.toString()).append("\n");
+
+		return string.toString();
 	}
 
 	/**
@@ -70,6 +141,7 @@ public class StudentDB {
 
 		QueryParser parser = new QueryParser(query);
 		if (parser.isDirectQuery()) {
+			System.out.println("Koristeći brzo pretraživanje po indexu!");
 			forReturn.add(database.forJMBAG(parser.getQueriedJMBAG()));
 		} else {
 			forReturn.addAll(database.filter(new QueryFilter(parser.getQuery())));
@@ -99,7 +171,7 @@ public class StudentDB {
 	}
 
 	/**
-	 * Metoda koja postavlja vrijednost studentska baze
+	 * Metoda koja postavlja vrijednost studentske baze
 	 * 
 	 * @param database
 	 *            - baza studenata

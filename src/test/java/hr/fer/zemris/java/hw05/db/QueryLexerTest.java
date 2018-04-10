@@ -57,4 +57,10 @@ public class QueryLexerTest {
 		assertNull(lexer.getToken());
 	}
 	
+	@SuppressWarnings("unused")
+	@Test(expected=NullPointerException.class)
+	public void nullTest() {
+		QueryLexer lexer=new QueryLexer(null);
+	}
+	
 }

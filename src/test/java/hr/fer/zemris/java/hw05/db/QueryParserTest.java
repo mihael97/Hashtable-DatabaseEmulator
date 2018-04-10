@@ -90,6 +90,12 @@ public class QueryParserTest {
 	}
 	
 	@SuppressWarnings("unused")
+	@Test(expected=NullPointerException.class)
+	public void nullTest() {
+		QueryParser parser = new QueryParser(null);
+	}
+	
+	@SuppressWarnings("unused")
 	@Test(expected=IllegalArgumentException.class)
 	public void invalidInput1() {
 		QueryParser parser = new QueryParser("\"Ante\"=firstName");

@@ -21,22 +21,22 @@ public class FieldValueGettersTest {
 	public void example1() {
 		StudentDatabase db=new StudentDatabase(readFromFile());
 		
-		StudentRecord record=db.forJMBAG("0000000481");
+		StudentRecord record=db.forJMBAG("0000000013");
 		
-		assertEquals("Prezime481", FieldValueGetters.LAST_NAME.get(record));
-		assertEquals("Ime481", FieldValueGetters.FIRST_NAME.get(record));
-		assertEquals("0000000481", FieldValueGetters.JMBAG.get(record));
+		assertEquals("Gagić", FieldValueGetters.LAST_NAME.get(record));
+		assertEquals("Mateja", FieldValueGetters.FIRST_NAME.get(record));
+		assertEquals("0000000013", FieldValueGetters.JMBAG.get(record));
 	}
-	
+
 	@Test
 	public void example2() {
 		StudentDatabase db=new StudentDatabase(readFromFile());
 		
-		StudentRecord record=db.forJMBAG("0000000369");
+		StudentRecord record=db.forJMBAG("0000000028");
 		
-		assertEquals("Prezime369", FieldValueGetters.LAST_NAME.get(record));
-		assertEquals("Ime369", FieldValueGetters.FIRST_NAME.get(record));
-		assertEquals("0000000369", FieldValueGetters.JMBAG.get(record));
+		assertEquals("Kosanović", FieldValueGetters.LAST_NAME.get(record));
+		assertEquals("Nenad", FieldValueGetters.FIRST_NAME.get(record));
+		assertEquals("0000000028", FieldValueGetters.JMBAG.get(record));
 	}
 	
 	private List<String> readFromFile() {

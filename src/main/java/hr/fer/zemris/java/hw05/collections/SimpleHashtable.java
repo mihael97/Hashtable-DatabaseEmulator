@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static java.lang.Math.abs;
 
@@ -106,9 +107,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 	 *             - ako je ključ zapisa null
 	 */
 	public void put(K key, V value) {
-		if (key == null) {
-			throw new IllegalArgumentException("Ključ zapisa ne smije biti null!");
-		} else if (checkSize() && !containsKey(key)) {
+
+		Objects.requireNonNull(key, "Ključ ne smije biti null!");
+
+		if (checkSize() && !containsKey(key)) {
 
 			TableEntry<K, V>[] pomTable = Arrays.copyOf(table, capacity);
 			capacity *= 2;
@@ -130,12 +132,14 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
 		if (pomEntry == null) {
 			table[hashCode] = new TableEntry<>(key, value, null);
+			modificationCount++;
 			size++;
 		} else {
 			while (true) {
 				if (pomEntry.key.equals(key)) {
 					change = true;
 					pomEntry.setValue(value);
+					modificationCount++;
 					break;
 				}
 
@@ -173,16 +177,18 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 	 */
 	public V get(Object key) {
 
-		TableEntry<K, V> entry = table[getHashCode(key)];
+		if (key != null) {
+			TableEntry<K, V> entry = table[getHashCode(key)];
 
-		while (true) {
-			if (entry.getKey().equals(key)) {
-				return entry.getValue();
+			while (true) {
+				if (entry.getKey().equals(key)) {
+					return entry.getValue();
+				}
+
+				if (entry.next == null)
+					break;
+				entry = entry.next;
 			}
-
-			if (entry.next == null)
-				break;
-			entry = entry.next;
 		}
 
 		return null;
@@ -368,14 +374,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		 * @param next
 		 *            - sljedeći član
 		 * 
-		 * @throws IllegalArgumentException
+		 * @throws NullPointerException
 		 *             - ako je predani argument za ključ null
 		 */
 		public TableEntry(K key, V value, TableEntry<K, V> next) {
-			if (key == null) {
-				throw new IllegalArgumentException("Ključ ne smije biti null!");
-			}
-			this.key = key;
+			this.key = Objects.requireNonNull(key, "Ključ ne smije niti null!");
 			this.value = value;
 			this.next = next;
 		}
@@ -431,16 +434,26 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		/**
 		 * Index na "slot" hash tablice u kojem se nalazimo
 		 */
-		private int index = 0;
+		private int index;
 		/**
 		 * Referenca na zadnji vracen element - par
 		 */
-		private TableEntry<K, V> current = table[0];
+		private TableEntry<K, V> current;
 		/**
 		 * Varijabla koja cuva broj izmjena koje su se dogodile do pocetka stvaranja
 		 * iteratora
 		 */
-		private int modCount = modificationCount;
+		private int modCount;
+
+		/**
+		 * Zadani konstruktor koji inicijalizira index,trentno stanje i varijablu
+		 * modifikacije
+		 */
+		public IteratorImpl() {
+			index = 0;
+			current = table[0];
+			modCount = modificationCount;
+		}
 
 		/**
 		 * Metoda koja provjerava sadrži li tablica sljedeci zapis
@@ -503,6 +516,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			} else if (current == null || current.next == null) {
 				index++;
 				for (int i = index, length = table.length; i < length; i++) {
+					if (i >= table.length) {
+						break;
+					}
+
 					if (table[i] != null) {
 						current = table[i];
 						return current;

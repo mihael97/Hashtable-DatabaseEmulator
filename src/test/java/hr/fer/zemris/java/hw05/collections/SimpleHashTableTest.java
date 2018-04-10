@@ -24,7 +24,7 @@ public class SimpleHashTableTest {
 		assertEquals(4, hashtable.size());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void putNull() {
 		SimpleHashtable<String, String> hashtable = new SimpleHashtable<>();
 

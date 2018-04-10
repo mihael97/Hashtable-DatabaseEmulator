@@ -70,6 +70,14 @@ public class ComparisonOperators {
 			return value1.startsWith(pomArray[0]) && value1.endsWith(pomArray[1]);
 		}
 
+		/**
+		 * Metoda rastavlja niz na dvije polovice ovisno o znaku *
+		 * 
+		 * @param string
+		 *            - niz
+		 * @return polje gdje se na prvoj poziciji nalazi sadržaj prije znaka,a na
+		 *         drugoj poslije
+		 */
 		private String[] split(String string) {
 			String[] forReturn = new String[2];
 			char[] array = string.toCharArray();
@@ -81,7 +89,7 @@ public class ComparisonOperators {
 						forReturn[0] = null;
 						forReturn[1] = string.substring(1);
 					} else {
-						forReturn[0] = string.substring(0, i - 1);
+						forReturn[0] = builder.toString();
 
 						if (i + 1 != length) {
 							forReturn[1] = string.substring(i + 1);
