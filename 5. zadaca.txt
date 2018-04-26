@@ -1,0 +1,111 @@
+Šego, Ivan (0036495633), vrsta: 2. - 5
+ 
+Pozdrav!
+
+1.zad - dupliciranje kod u konstruktorima, trebao si implementirati public SimpleHashTable(int capacity) i onda ovaj defaultni konstruktor implementirati ovako: public SimpleHashTable() {this(DEFAULT_CAPACITY)}
+
+2.zad - uredu
+
+3.zad - "Sljedeći kod bacio bi IllegalStateException jer se uklanjanje poziva više od jednom za trenutni par nad
+kojim je iterator (to bi bacio drugi poziv metode remove):" - nigdje ne bacaš IllegalStateException (uvijek bacaš ConcurrentModificationException)
+
+4.zad - prolazi na primjerima, nemam neke zamjerke
+
+Meni je ovo sasvim korektna zadaća, možda malo više javadoca uz gornje opaske, ocjena 5.
+
+
+
+Petračić, Tin (0036501159), vrsta: 1. - 4
+
+1. Zadatak
+-ako je BASIC_CAPACITY konstanta onda bi bilo dobro još dodati i ključnu vrijednost final kako bi se to eksplicitno reklo
+-članska varijabla capacity je kao takva nepotrebna jer se to te informacije uvijek može doći pozivom table.length, ovako se samo
+možeš negdje zabuniti i zaboraviti promijeniti capacity pa dobiti pogrešku, ovako je puno sigurnije
+-bilo bi također lijepo da defaultni konstruktor delegira svoj posao ovom konstruktoru koji prima capacity, ovako imaš dupliciranje koda,
+nije puno ali uvijek kad pišeš konstruktore, pitaj se na koji način možeš delegirati jednom od njih posao drugog... delegacija se uvijek odvija
+od općenitijim prema specifičnim, kao u ovom slučaju, najopćeniti mogući(ovaj defaultni koji ništa ne prima kao argument) je trebao
+delegirati svoj posao ovom specifičnijem(koji prima početni kapacitet))
+-nekako se metoda put ne pridržava načela "do one thing only" pa bi bolje bilo ovo resizeanje i ponovno popunjavanje veće tablice
+izdvojiti u novu metodu jer to nije zadaća metode put... Također, modification count se ne bi trebao povećavati prilikom gaženja
+stare vrijednosti novom kada se preda ključ koji već postoji jer se ne mijenja struktura same tablice.
+-uoči da metode get i containsKey rade u suštini istu stvar, za predani ključ trče po tablici i žele doći do odgovarajućeg entryja,
+takvo dupliciranje se moglo izbaciti na način da si napravio novu privatnu metodu koja će na temelju predanog ključa dohvatiti traženi entry,
+naravno ako entry ne postoji za takav ključ, vratit će null... i onda u metodi get samo uzeti vrijednost iz tog entryja, a u metodi
+containsKey pitati je li ta pomoćna metoda vratila ikoji entry, ako je onda sigurno mapa sadrži traženi ključ pa vratić true, false ako nazad dobiješ null
+-containsValue i remove rade super, samo mala napomena: uzet ću na primjer metodu remove gdje kažeš if(key != null) onda {...}, bolje bi bilo
+na početku pitati if(key == null) throw new nullpointerex.... jer na taj način nemaš nepotrebne identacije koje, ako ih imaš više, uvelike otežavaju
+čitljivost koda
+-kroz toString metodu se moglo šetati i novonapravljenim iteratorom ali i ovo rješenje je super
+-iterator radi za sve navedene primjere u zadaći, testovi su također dobro napisani
+
+2. Zadatak
+-uh, u ComparisonOperators razredu imaš jako jako zakompliciran LIKE operator, njega se moglo riješiti u jednoj liniji koda na sljedeći način:
+LIKE = ((value1, value2) -> {
+			value2 = value2.replace("*", ".*");
+			return value1.matches(value2);
+		});
+ALI razumijem da se nisi sjetio ili nisi znao da postoji takvo što definirano nad primjercima razreda String, ali ova metoda je kao stvorena
+za ovakve stvari...
+-QueryLexer metoda getToken(): -preskakanje praznina si trebao odvojiti u pomoćnu metoda koja će raditi taj posao
+-QueryParser u metodi getQuery trebalo bi izdvojiti određivanja FieldValueGettera i ComparisonOperatora u nove metode, još jednom naglašavam
+da svaka metoda mora raditi samo jedan posao! Uvijek kad napišeš metodu koja ne stane na ekran(odnosno moraš scrollat gore dolje da
+bi vidio o čemu se radi) pitaj se koji dio možeš izdvojit u zasebnu metodu jer takav pristup olakšava čitljivost samog koda, i što je 
+najbitnije olakšava buduće promjene unutar istog.
+-StudentDatabase - nemoj inicijalizirati članske varijable unutar metode add, za to služi konstruktor...
+-StudentRecord - u zadatku je zadano da su studenti jednaki ako im je jmbag jednak, a ti u metodi equals provjeravaš sve, čak i jel im ocjena
+jednaka... također na isti način bi i hashcode trebala vratiti rezultat, odnosno hashcode se trebao generirati isključivo prema jmbagu
+-StudentDB - malo me pika u oči ovaj magični broj u petlji metode makeTable, znam da bi trebalo proći kroz sva 4 atributa StudentRecorda
+ali svejedno je dobra praksa takvo što izdvojiti u privatnu statičku konstantu npr. DEFAULT_ARGUMENT_LENGTH ili slično...
+-program zadovoljava osnovni slučaj zadan u zadaći, ali ruši mi se u situaciji kada spojim operator LIKE sa literalom i atributom, to je isto
+trebalo riješiti...
+
+Generalno zadaća je vrlo dobro riješena, neke stvari su dobro napravljene a neke malo manje, testove imaš, javadoc isto iako bih volio
+da je malo informativniji ali u redu je. Evo zbog navedenih greškica i što nisi riješio operator LIKE da ga se može sljepiti uz
+atribut i literal(što je jedan od rubnih slučajeva koje je također trebalo riješiti) moja ocjena je 4. Sretno dalje!
+
+
+
+Pongračić, Kristijan (0036500632), vrsta: 1. - 3
+
+1.-3. zadatak: Konstruiranje s BASIC_CAPACITY mogao si delegirat drugom konstruktoru, a ne duplicirat kod. Ako se unese capacity koji je npr. 4 on neće biti 4 nego će biti 8 jer si trebao stavit u setCapacity metodu <=. U metodi put resizeanje si mogao staviti u novu metodu. U TableEntry si mogao overrideat metodu toString te bi metoda toString u SimpleHashtable samo delegirala posao toj metodi. IllegalStateException bi se trebao baciti ak se poziva 2 puta metoda remove u iteratoru. Ako se pozove containsValue nad SimpleHashtable-om kada je u njemu null vrijednost baca ti se iznimka NullPointerException što nebi smjelo. Sve ostalo je relativno dobro napisano i javadoc je dobro napisan.
+
+4. zadatak: Operacija LIKE ti je jako duga te smatram da se mogla elegantije i kraće riješiti, ali tvoje funkcionira. 
+Izvođenje main u StudentDB: prvo što treba upisati > i zatim pokraj toga unositi naredbu, a ne u drugi redak. Trebao si koristiti print, a ne println. Kada se unese nevažeći query program ti se sruši te baci exception što je jako loše rješenje. Trebao si ulovit svaki excepiton, ispisat prikladnu poruku i nastaviti s radom, a ne ovako. Dobro je što ti za svaki krivi upit detaljno ispiše što je krivo, ali trebalo je nastaviti raditi i čekati novi upit.
+
+Uglavnom zadaća je dobro rijšena, javadoc je uredno napisan, testovi su prikladni i prolaze. Ocijena je 3 zbog maina u StudentDB jer se sruši kad se unese krivi query što je jako loše. Također pripazi na dupliciranje koda kao kod ispisa studenata iz baze(drugčije je samo arugment ispisa) i pokušaj uvijek delegirat neki posao na manje metode.
+
+
+
+Posavec, Marko (0036494802), vrsta: 1. - 4
+
+Macuka, Mihael (0036503447)
+
+1. zadatak
+Metodu checkSize pozivas samo jednom i mislim da nije potrebno odvajati jedan uvjet u zasebnu metodu. U toj metodi provjeravas
+(size/capacity) >= 0.75, size je int, capacity je int, int/int je int, moraš castati jednog u double. Zbog toga ti se ne resizea
+dobro veličina tablice. Oko samih implementacija metoda SimpleHashtablea nemam zamjerki, ali iterator u nekim slučajevima ne radi.
+Remove kad se pozove dva puta za redom ne baca iznimku, npr. :
+
+Iterator<SimpleHashtable.TableEntry<String, Integer>> iter = examMarks.iterator();
+iter.next();
+iter.remove();
+iter.remove();
+Cak i kad baci iznimku nakon sto treci put pozoves remove, nije iznimka koja bi trebala biti. Trebao si u metodi remove provjeriti 
+postoji li trenutni entry u tablici i onda baciti IllegalStateException ako ga nema (vec si ga removao).
+
+Remove pozvan prije nego sto se next pozove prvi puta ne baca IllegalStateException. Metoda hasNext nije dobro napisana. 
+Što ako su u tablici sve null vrijednosti, zasto bi hasNext vratio true u tom slucaju?
+
+Općenito greške nisu velike i jako lagano se isprave.
+
+2. zadatak
+
+Svi minimalni slucajevi rade. StudentRecord ima pogrešno implementiranu metodu equals. Dva studenta su jednaka ako im je jmbag jednak,
+ne sve ostale clanske varijable. ComparsionOperators i FieldValueGetters, sve varijable koje sadrze trebaju biti final. Ova implementacija
+LIKE operatora je dosta složena. Zasto nisi splitao po * sa funkcijom koju nudi klasa String ( split("\\*")). 
+Isto tako zanimljiv nacin da prebrojis pojavljivanje znaka u stringu je: str.length() - str.replaceAll("*", ""), ali ne kazem da je tvoj nacin krivi. 
+U tom zadatku ne hvataš nikakve iznimke za krivi unos, neki ilegalni unosi ispisuju rezultate, npr. query ispisuje cijelu bazu, neki legalni unosi bacaju exception,
+ npr. query jmbag = "2".
+ 
+Ocjena za ovu zadacu je 4, mislim da je bitno da se pobacaju iznimke na odgovarajucim mjestima u drugom zadatku, i ulove u glavnom programu uz odgovarajucu poruku, pa malo pripazi na to u buducnosti.
+Trebao bi proci kroz parser i lexer pa onda pobacati na svim mjestima odgovarajuce iznimke.
