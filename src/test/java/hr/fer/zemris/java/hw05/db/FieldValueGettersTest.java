@@ -38,7 +38,7 @@ public class FieldValueGettersTest {
 		assertEquals("Nenad", FieldValueGetters.FIRST_NAME.get(record));
 		assertEquals("0000000028", FieldValueGetters.JMBAG.get(record));
 	}
-	
+
 	private List<String> readFromFile() {
 		try {
 			List<String> lines = Files.readAllLines(Paths.get("src/main/resources/Studenti.txt"),
@@ -46,7 +46,6 @@ public class FieldValueGettersTest {
 
 			return lines;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -163,7 +163,6 @@ public class StudentDB {
 
 			return lines;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

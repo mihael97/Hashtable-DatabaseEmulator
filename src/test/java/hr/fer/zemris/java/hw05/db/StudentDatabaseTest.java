@@ -62,7 +62,6 @@ public class StudentDatabaseTest {
 
 			return lines;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
